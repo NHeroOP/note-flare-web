@@ -16,7 +16,7 @@ interface IAuthStore {
     sucess: boolean; error?: AppwriteException | undefined | null
   }>;
   loginWithGoogle(): Promise<{
-    sucess: boolean; error?: {} | undefined | null
+    sucess: boolean; error?: AppwriteException | undefined | null
   }>;
   createAccount(name: string, email: string, password: string): Promise<{
     sucess: boolean; error?: AppwriteException | undefined | null
@@ -97,7 +97,7 @@ export const useAuthStore = create<IAuthStore>()(
         catch (error) {
           console.log(error);
           
-          return { sucess: false, error: error }
+          return { sucess: false, error: error instanceof AppwriteException ? error : null }
           
         }
       },
