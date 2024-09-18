@@ -1,7 +1,7 @@
 "use client"
 
 import React, { ReactNode } from 'react'
-import Navbar from './NavBar'
+import Navbar from './Navbar'
 import Footer from './Footer'
 import { useTheme } from 'next-themes'
 
