@@ -96,7 +96,7 @@ export default function Login() {
   }
 
   return (
-    <section className="flex justify-center items-center h-screen ">
+    <section className="flex flex-grow justify-center items-center">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Card className="mx-auto max-w-sm">
