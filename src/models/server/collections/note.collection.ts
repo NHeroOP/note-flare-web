@@ -1,6 +1,7 @@
 import { db, noteCollection } from "@/models/name";
 import { databases } from "../config";
 import { IndexType, Permission} from "node-appwrite";
+import waitForAttributes from "../helper/waitForAttribute";
 
 export default async function createNoteCollection() {
   await databases.createCollection(
@@ -28,6 +29,7 @@ export default async function createNoteCollection() {
     databases.createIntegerAttribute(db, noteCollection, "downloads_count", true), 
   ]);
 
+  await waitForAttributes(db, noteCollection, ["subject", "tags", "likes_count", "downloads_count"]);
 
   // Create indexes for efficient querying
   await Promise.all([
@@ -35,5 +37,6 @@ export default async function createNoteCollection() {
     databases.createIndex(db, noteCollection, "tags", IndexType.Key, ["tags"]), 
     databases.createIndex(db, noteCollection, "likes_count", IndexType.Key, ["likes_count"]), 
     databases.createIndex(db, noteCollection, "downloads_count", IndexType.Key, ["downloads_count"]),
+    databases.createIndex(db, noteCollection, "createdAt", IndexType.Key, ["$createdAt"]),
   ]);
 }

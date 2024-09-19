@@ -1,6 +1,7 @@
 import { likeCollection, db } from "@/models/name"
 import { databases } from "../config"
 import { IndexType, Permission } from "node-appwrite"
+import waitForAttributes from "../helper/waitForAttribute"
 
 export default async function createLikeCollection() {
   // Creating collection
@@ -17,6 +18,8 @@ export default async function createLikeCollection() {
     databases.createStringAttribute(db, likeCollection, "note_id", 500, true),
     databases.createStringAttribute(db, likeCollection, "user_id", 50, true),
   ])
+
+  await waitForAttributes(db, likeCollection, ["note_id", "user_id"])
 
   // Creating Indexes
   await Promise.all([

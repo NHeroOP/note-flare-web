@@ -1,6 +1,7 @@
 import { commentCollection, db } from "@/models/name";
 import { databases } from "../config";
 import { IndexType, Permission } from "node-appwrite";
+import waitForAttributes from "../helper/waitForAttribute";
 
 export default async function createCommentCollection() {
   
@@ -20,9 +21,11 @@ export default async function createCommentCollection() {
     databases.createStringAttribute(db, commentCollection, "note_id", 50, true),  
   ])
 
+  await waitForAttributes(db, commentCollection, ["note_id"])
+
   // Creating Indexes
   await Promise.all([
     databases.createIndex(db, commentCollection, "note_id", IndexType.Key, ["note_id"]),
-    // databases.createIndex(db, commentCollection, "createdAt", IndexType.Key, ["createdAt"], ["desc"]),
+    databases.createIndex(db, commentCollection, "createdAt", IndexType.Key, ["$createdAt"], ["desc"]),
   ])
 }
