@@ -21,7 +21,7 @@ const subjects = [
   { name: 'Literature', value: 'literature' },
 ]
 
-export default function UploadPage() {
+export default function Component() {
   const { theme, setTheme } = useTheme()
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
@@ -33,7 +33,7 @@ export default function UploadPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
   const toggleTheme = () => {
-    setTheme(() => theme === 'light' ? 'dark' : 'light')
+    setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,107 +74,110 @@ export default function UploadPage() {
   }
 
   return (
-    <>
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Card className="max-w-2xl mx-auto dark:bg-black/50">
-          <CardHeader>
-            <CardTitle className="text-2xl">Upload Your Notes</CardTitle>
-            <CardDescription>Share your knowledge with students worldwide</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    placeholder="Enter the title of your notes"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Select value={subject} onValueChange={setSubject} required>
-                    <SelectTrigger id="subject">
-                      <SelectValue placeholder="Select a subject" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {subjects.map((subject) => (
-                        <SelectItem key={subject.value} value={subject.value}>
-                          {subject.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Provide a brief description of your notes"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tags">Tags</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="tags"
-                      placeholder="Add tags"
-                      value={currentTag}
-                      onChange={(e) => setCurrentTag(e.target.value)}
-                    />
-                    <Button type="button" onClick={handleAddTag}>Add Tag</Button>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="flex items-center space-x-1 ">
-                        <span>{tag}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="h-5 w-5 p-0"
-                          onClick={() => handleRemoveTag(tag)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="file">Upload File</Label>
-                  <Input
-                    id="file"
-                    type="file"
-                    onChange={handleFileChange}
-                    required
-                    accept=".pdf,.doc,.docx,.txt"
-                  />
-                </div>
+    <main className="flex-grow container mx-auto px-4 py-8">
+      <Card className="max-w-2xl mx-auto bg-white dark:bg-gray-800">
+        <CardHeader className="text-center sm:text-left">
+          <CardTitle className="text-2xl sm:text-3xl font-bold">Upload Your Notes</CardTitle>
+          <CardDescription className="mt-2 text-sm sm:text-base">Share your knowledge with students worldwide</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-sm font-medium">Title</Label>
+              <Input
+                id="title"
+                placeholder="Enter the title of your notes"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="subject" className="text-sm font-medium">Subject</Label>
+              <Select value={subject} onValueChange={setSubject} required>
+                <SelectTrigger id="subject" className="w-full">
+                  <SelectValue placeholder="Select a subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subjects.map((subject) => (
+                    <SelectItem key={subject.value} value={subject.value}>
+                      {subject.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-sm font-medium">Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Provide a brief description of your notes"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                className="w-full min-h-[100px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tags" className="text-sm font-medium">Tags</Label>
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <Input
+                  id="tags"
+                  placeholder="Add tags"
+                  value={currentTag}
+                  onChange={(e) => setCurrentTag(e.target.value)}
+                  className="w-full sm:w-auto flex-grow"
+                />
+                <Button type="button" onClick={handleAddTag} className="w-full sm:w-auto">
+                  Add Tag
+                </Button>
               </div>
-              <Button type="submit" className="w-full mt-6" disabled={isSubmitting}>
-                {isSubmitting ? 'Uploading...' : 'Upload Notes'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="flex items-center space-x-1 px-2 py-1">
+                    <span>{tag}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-5 w-5 p-0 hover:bg-transparent"
+                      onClick={() => handleRemoveTag(tag)}
+                    >
+                      <X className="h-3 w-3" />
+                      <span className="sr-only">Remove tag</span>
+                    </Button>
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="file" className="text-sm font-medium">Upload File</Label>
+              <Input
+                id="file"
+                type="file"
+                onChange={handleFileChange}
+                required
+                accept=".pdf,.doc,.docx,.txt"
+                className="w-full"
+              />
+            </div>
+            <Button type="submit" className="w-full mt-6" disabled={isSubmitting}>
+              {isSubmitting ? 'Uploading...' : 'Upload Notes'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
 
-        {submitSuccess && (
-          <Alert className="mt-4 max-w-2xl mx-auto">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Success</AlertTitle>
-            <AlertDescription>
-              Your notes have been successfully uploaded. Thank you for contributing!
-            </AlertDescription>
-          </Alert>
-        )}
-      </main>
-    </>
+      {submitSuccess && (
+        <Alert className="mt-4 max-w-2xl mx-auto">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>
+            Your notes have been successfully uploaded. Thank you for contributing!
+          </AlertDescription>
+        </Alert>
+      )}
+    </main>
   )
 }
