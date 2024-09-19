@@ -7,7 +7,7 @@ export default async function waitForAttributes(databaseId: string, collectionId
     const collection = await databases.getCollection(databaseId, collectionId);
     
     attributesAvailable = attributeKeys.every(key => {
-      const attribute = collection.attributes.find(attr => attr.key === key);
+      const attribute: any = collection.attributes.find((attr: any) => attr.key === key);
       return attribute && attribute.status === 'available';
     });
 
