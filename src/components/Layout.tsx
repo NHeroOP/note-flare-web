@@ -1,22 +1,27 @@
 "use client"
 
-import React, { ReactNode } from 'react'
+import React from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
-import { useTheme } from 'next-themes'
+import BottomNavbar from './BottomNavbar'
+import { useMediaQuery } from 'react-responsive'
+import { usePathname } from 'next/navigation'
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { theme } = useTheme()
+  const isMobile = useMediaQuery({ query: '(max-width: 426px)' })
+  const path = usePathname()
+  
 
   return (
     <div className={`min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900`}>
-      <Navbar  />
+      {(!isMobile || path === "/") && <Navbar />}
       {children}
-      <Footer />
+      {(!isMobile || path === "/") && <Footer />}
+      {(isMobile && path !== "/") && <BottomNavbar />}
     </div>
   )
 }
