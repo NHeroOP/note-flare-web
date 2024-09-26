@@ -1,17 +1,78 @@
+
+import { SESSION_COOKIE } from '@/const';
 import env from '@/env';
-import { Client, Storage, Databases, Users, Avatars } from 'node-appwrite';
+import { cookies } from 'next/headers';
+import { Client, Storage, Databases, Users, Avatars, Account } from 'node-appwrite';
 
-let client = new Client();
+export async function createSessionClient(session: any) {
+  
+  const client = new Client()
+    .setEndpoint(env.appwrite.endpoint)
+    .setProject(env.appwrite.projectId);
+  
+  // const session = cookies().get(SESSION_COOKIE);
+  
 
-client
-  .setEndpoint(env.appwrite.endpoint)
-  .setProject(env.appwrite.projectId)
-  .setKey(env.appwrite.apiKey);
-;
+  if (!session || !session.value) {
+    throw new Error("No session found");
+  }
 
-const databases = new Databases(client);
-const avatars = new Avatars(client);
-const storage = new Storage(client);
-const users = new Users(client);
+  client.setSession(session.value);
 
-export { client, databases, users, avatars, storage };
+  return {
+    get account() {
+      return new Account(client);
+    },
+    get storage() {
+      return new Storage(client);
+    },
+    get databases() {
+      return new Databases(client);
+    },
+    get users() {
+      return new Users(client);
+    },
+    get avatars() {
+      return new Avatars(client);
+    },
+  };
+}
+
+
+export async function createAdminClient() {
+  const client = new Client()
+    .setEndpoint(env.appwrite.endpoint)
+    .setProject(env.appwrite.projectId)
+    .setKey(env.appwrite.apiKey);
+  
+  return {
+    get account() {
+      return new Account(client);
+    },
+    get storage() {
+      return new Storage(client);
+    },
+    get databases() {
+      return new Databases(client);
+    },
+    get users() {
+      return new Users(client);
+    },
+    get avatars() {
+      return new Avatars(client);
+    },
+  };
+}
+
+export async function getLoggedInUser() {
+  try {
+    const session = cookies().get(SESSION_COOKIE);
+
+    const { account } = await createSessionClient(session)
+    const user = await account.get()
+    
+    return user;
+  } catch (err) {
+    return null;
+  }
+}
