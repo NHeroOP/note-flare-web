@@ -1,9 +1,11 @@
 import { likeCollection, db } from "@/models/name"
-import { databases } from "../config"
+import { createAdminClient } from "../config"
 import { IndexType, Permission } from "node-appwrite"
 import waitForAttributes from "../helper/waitForAttribute"
 
 export default async function createLikeCollection() {
+  const { databases } = await createAdminClient()
+
   // Creating collection
   await databases.createCollection(db, likeCollection, likeCollection, [
     Permission.read("any"),

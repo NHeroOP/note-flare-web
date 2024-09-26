@@ -1,6 +1,8 @@
-import { databases } from "../config";
+import { createAdminClient } from "../config";
 
 export default async function waitForAttributes(databaseId: string, collectionId: string, attributeKeys: Array<string>) {
+  const { databases } = await createAdminClient();
+
   let attributesAvailable = false;
   
   while (!attributesAvailable) {

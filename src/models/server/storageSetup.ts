@@ -1,8 +1,10 @@
 import { Permission } from "node-appwrite";
 import { noteAttachmentBucket } from "../name";
-import { storage } from "./config";
+import { createAdminClient } from "./config";
 
 export default async function getOrCreateStorage() {
+  const { storage } = await createAdminClient()
+
   try {
     await storage.getBucket(noteAttachmentBucket);
     console.log("Storage Connected");

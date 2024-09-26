@@ -1,5 +1,5 @@
 import { db } from "../name";
-import { databases } from "./config";
+import { createAdminClient } from "./config";
 
 import {
   createCommentCollection,
@@ -9,7 +9,9 @@ import {
 } from "./index"
 
 export default async function getOrCreateDB() {
+  const { databases } = await createAdminClient();
   try {
+
     await databases.get(db);
     console.log("Database connected");
   }

@@ -1,9 +1,10 @@
 import { commentCollection, db } from "@/models/name";
-import { databases } from "../config";
 import { IndexType, Permission } from "node-appwrite";
 import waitForAttributes from "../helper/waitForAttribute";
+import { createAdminClient } from "../config";
 
 export default async function createCommentCollection() {
+  const { databases } = await createAdminClient()
   
   // Creating collection
   await databases.createCollection(db, commentCollection, commentCollection, [

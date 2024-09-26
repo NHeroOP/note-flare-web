@@ -1,9 +1,12 @@
 import { db, noteCollection } from "@/models/name";
-import { databases } from "../config";
+import { createAdminClient } from "../config";
 import { IndexType, Permission} from "node-appwrite";
 import waitForAttributes from "../helper/waitForAttribute";
+import { array } from "zod";
 
 export default async function createNoteCollection() {
+  const { databases } = await createAdminClient();
+
   await databases.createCollection(
     db,
     noteCollection,
@@ -24,9 +27,9 @@ export default async function createNoteCollection() {
     databases.createStringAttribute(db, noteCollection, "description", 255, true), 
     databases.createStringAttribute(db, noteCollection, "file_url", 255, true), 
     databases.createStringAttribute(db, noteCollection, "subject", 255, true),
-    databases.createStringAttribute(db, noteCollection, "tags", 500, false), 
-    databases.createIntegerAttribute(db, noteCollection, "likes_count", true),
-    databases.createIntegerAttribute(db, noteCollection, "downloads_count", true), 
+    databases.createStringAttribute(db, noteCollection, "tags", 500, false, undefined ,true),
+    databases.createIntegerAttribute(db, noteCollection, "likes_count", true, 0),
+    databases.createIntegerAttribute(db, noteCollection, "downloads_count", true, 0), 
   ]);
 
   await waitForAttributes(db, noteCollection, ["subject", "tags", "likes_count", "downloads_count"]);
