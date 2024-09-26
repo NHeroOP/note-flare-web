@@ -13,3 +13,5 @@ export const subjects = [
   { name: 'Civics', value: 'Civics' },
   { name: 'Geography', value: 'Geography' },
 ]
+
+export const SESSION_COOKIE = "a_session"
