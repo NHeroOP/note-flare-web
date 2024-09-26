@@ -17,25 +17,25 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { loginSchema } from "@/schemas/loginSchema"
+
 import { Loader2 } from "lucide-react"
 
-import { useAuthStore } from '@/store/Auth'
+import { loginSchema } from "@/schemas/loginSchema"
+import { signInWithGoogle } from "@/models/server/oauth"
+import axios from "axios"
+
 
 export default function Login() {
-  const { login, loginWithGoogle } = useAuthStore()
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
@@ -49,11 +49,6 @@ export default function Login() {
     },
   })
 
-  const handleGoogleLogin = async () => {
-    console.log("Calling loginWithGoogle:", "http://localhost:3000/", "http://localhost:3000/login");
-    await loginWithGoogle();
-  };
-
   const onSubmit = async(data: z.infer<typeof loginSchema>) => {
     if (data.identifier === "" || data.password === "") { 
       return;
@@ -62,12 +57,12 @@ export default function Login() {
     setLoading(true)
 
     try {
-      const res = await login(data.identifier, data.password)
+      const res = (await axios.post("/api/auth/login", {email: data.identifier, password: data.password})).data
       console.log(res);
       
 
-      if (!res?.error) {
-        router.replace("/")
+      if (!res?.error && res?.success) {
+        router.replace("/home")
         toast({
           title: "Login Success!",
           description: "You have successfully logged in",
@@ -97,16 +92,16 @@ export default function Login() {
 
   return (
     <section className="flex flex-grow justify-center items-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <Card className="mx-auto max-w-sm">
-            <CardHeader>
-              <CardTitle className="text-2xl">Login</CardTitle>
-              <CardDescription>
-                Enter your email below to login to your account
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <FormField
@@ -145,20 +140,23 @@ export default function Login() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   </> : "Login"}
                 </Button>
-                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-                  Login with Google
-                </Button>
               </div>
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="#" className="underline">
-                  Sign up
-                </Link>
-              </div>
-            </CardContent>
-          </Card> 
-        </form>
-      </Form>  
+            </form>
+          </Form>
+          <form className="mt-4" action={signInWithGoogle}>
+          
+            <Button variant="outline" className="w-full">
+              Login with Google
+            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card> 
     </section>
   )
 }
