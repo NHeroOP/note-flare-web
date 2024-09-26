@@ -2,7 +2,7 @@
 
 import { Book, LogIn, LogOut, Moon, Sun } from 'lucide-react'
 import Link from 'next/link'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
