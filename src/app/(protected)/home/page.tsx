@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, ThumbsUp, FileText } from 'lucide-react'
 
 import { subjects } from '@/const'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 
 const sortOptions = [
@@ -34,26 +36,53 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('all')
   const [sortBy, setSortBy] = useState('downloads')
+  const [notes, setNotes] = useState(Array())
+  const [filteredAndSortedNotes, setFilteredAndSortedNotes] = useState(notes)
 
   const [loading, setLoading] = useState(false) 
+  const [mounted, setMounted] = useState(false)
 
-  const filteredAndSortedNotes = notes
-    .filter(note => 
-      (selectedSubject === 'all' || note.subject.toLowerCase() === selectedSubject) &&
-      (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-       note.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-       note.author.toLowerCase().includes(searchQuery.toLowerCase()))
+  const router = useRouter()
+
+  const getNotes = useCallback(async () => {
+    const { data: notesRes } = await axios.get("/api/notes/get/all")
+
+    if (notesRes.success) {
+      const notes_ = notesRes.notes as Array<any>
+      setNotes(notes_)
+
+      const filteredAndSortedNotes = notes_
+        .filter(note => 
+          (selectedSubject === 'all' || note.subject.toLowerCase() === selectedSubject) &&
+          (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          note.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          note.author.toLowerCase().includes(searchQuery.toLowerCase()))
+        )
+        .sort((a, b) => {
+          if (sortBy === 'downloads') return b.downloads - a.downloads
+          if (sortBy === 'likes') return b.likes - a.likes
+          if (sortBy === 'recent') return new Date(b.date).getTime() - new Date(a.date).getTime()
+          return 0
+        })
+      
+      setFilteredAndSortedNotes(filteredAndSortedNotes)
+    }
+  }, [])
+  useEffect(() => {
+    getNotes()
+    setMounted(true)
+  }, [getNotes])
+
+  if (!mounted) {
+    return (
+      <div className="h-full flex flex-grow justify-center items-center">
+        <span className="loading loading-bars w-48"></span>
+      </div>
     )
-    .sort((a, b) => {
-      if (sortBy === 'downloads') return b.downloads - a.downloads
-      if (sortBy === 'likes') return b.likes - a.likes
-      if (sortBy === 'recent') return new Date(b.date).getTime() - new Date(a.date).getTime()
-      return 0
-    })
-  
+  }
 
   return (
-    <main className="flex-grow container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <main className="flex-grow container mx-auto px-4 pt-8 pb-2 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <section className="mb-8 text-center">
         <h1 className="text-3xl sm:text-4xl font-bold mb-4">Find the Best Study Notes</h1>
         <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-6">Access high-quality notes from top students worldwide</p>
@@ -98,7 +127,7 @@ export default function Home() {
       <section>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAndSortedNotes.map((note) => (
-            <Card key={note.id} className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow">
+            <Card key={note.id} className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" onClick={() => router.replace(`/note/${note.id}`)}>
               <CardHeader className="p-0">
                 <Image src={"https://placehold.co/200x100.png"} alt={note.title} width={200} height={100} className="w-full h-32 object-cover rounded-t-lg" />
               </CardHeader>
@@ -107,18 +136,18 @@ export default function Home() {
                 <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{note.subject}</CardDescription>
                 <div className="flex items-center mt-2">
                   <Avatar className="h-6 w-6 mr-2">
-                    <AvatarImage src={`https://i.pravatar.cc/150?u=${note.author}`} />
-                    <AvatarFallback>{note.author[0]}</AvatarFallback>
+                    <AvatarImage src={`https://i.pravatar.cc/150`} />
+                    <AvatarFallback>{note.author}</AvatarFallback>
                   </Avatar>
                   <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">{note.author}</span>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between p-4">
                 <Badge variant="secondary" className="bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 flex items-center text-xs sm:text-sm">
-                  <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> {note.downloads}
+                  <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> {note.downloads_count}
                 </Badge>
                 <Badge variant="secondary" className="bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 flex items-center text-xs sm:text-sm">
-                  <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> {note.likes}
+                  <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> {note.likes_count}
                 </Badge>
               </CardFooter>
             </Card>
@@ -132,7 +161,7 @@ export default function Home() {
         </p>
       )}
 
-      <div className="mt-8 text-center">
+      <div className="mt-6 text-center">
         <Button variant="outline" className="w-full sm:w-auto bg-white hover:bg-gray-100 text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100">
           <FileText className="mr-2 h-4 w-4" /> Load More Notes
         </Button>

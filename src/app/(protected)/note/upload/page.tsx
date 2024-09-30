@@ -16,6 +16,9 @@ import { AlertCircle, X } from 'lucide-react'
 
 import { account } from '@/models/client/config'
 import axios from 'axios'
+import { useToast } from '@/hooks/use-toast'
+import { ToastAction } from '@/components/ui/toast'
+import { useRouter } from 'next/navigation'
 
 const subjects = [
   { name: 'Mathematics', value: 'mathematics' },
@@ -27,15 +30,16 @@ const subjects = [
 ]
 
 export default function Component() {
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('test title')
   const [subject, setSubject] = useState('')
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState('test description')
   const [file, setFile] = useState<File | null>(null)
   const [tags, setTags] = useState<string[]>([])
   const [currentTag, setCurrentTag] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitSuccess, setSubmitSuccess] = useState(false)
 
+  const { toast } = useToast()
+  const router = useRouter()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -58,7 +62,45 @@ export default function Component() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulating an API call
+    console.log(file);
+    
+
+    try {
+      const res = (await axios.post("/api/notes/create", { title, description, subject, tags, file },{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })).data
+
+      console.log(res);
+      
+
+      if (res.success) {
+        router.replace(`/note/${res.note_id}`)
+        toast({
+          title: "Note Created!",
+          description: "You have successfully created the note",
+        })
+      }
+      else {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Please fill all the fields and try again",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        })
+      }
+    }
+    catch (err: any) {
+      console.log(err);
+      
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Please fill all the fields and try again",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+    }
 
     // Reset form and show success message
     setTitle('')
@@ -67,10 +109,6 @@ export default function Component() {
     setFile(null)
     setTags([])
     setIsSubmitting(false)
-    setSubmitSuccess(true)
-
-    // Hide success message after 5 seconds
-    setTimeout(() => setSubmitSuccess(false), 5000)
   }
 
   return (
@@ -158,7 +196,7 @@ export default function Component() {
                 type="file"
                 onChange={handleFileChange}
                 required
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".pdf,.doc,.docx,.txt,.png,.jpeg,.jpg"
                 className="w-full"
               />
             </div>
@@ -168,16 +206,6 @@ export default function Component() {
           </form>
         </CardContent>
       </Card>
-
-      {submitSuccess && (
-        <Alert className="mt-4 max-w-2xl mx-auto">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>
-            Your notes have been successfully uploaded. Thank you for contributing!
-          </AlertDescription>
-        </Alert>
-      )}
     </main>
   )
 }
