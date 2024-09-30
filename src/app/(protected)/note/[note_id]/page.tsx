@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -174,139 +174,141 @@ export default function NotePage({ params: { note_id } }: NotePageProps) {
   }
 
   return (
-    <main className="flex-grow container mx-auto px-4 py-8">
-      <Card className="max-w-4xl mx-auto bg-white dark:bg-gray-800">
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-            <div className="w-full">
-              {isEditing ? (
-                <Input
-                  name="title"
-                  value={editedNote.title}
-                  onChange={handleInputChange}
-                  className="text-xl sm:text-2xl font-bold"
-                />
-              ) : (
-                <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{note.title}</CardTitle>
-              )}
-              {isEditing ? (
-                <Input
-                  name="subject"
-                  value={editedNote.subject}
-                  onChange={handleInputChange}
-                  className="mt-1 text-sm"
-                />
-              ) : (
-                <CardDescription className="mt-1 text-sm text-gray-600 dark:text-gray-400">{note.subject}</CardDescription>
-              )}
-            </div>
-            {isEditing ? (
-              <div className="flex gap-2 w-full sm:w-auto">
-                <Button onClick={handleSave} className="w-full sm:w-auto">
-                  <Save className="mr-2 h-4 w-4" />
-                  Save
-                </Button>
-                <Button variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto">
-                  <X className="mr-2 h-4 w-4" />
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <Button variant="outline" onClick={handleEdit} className="w-full sm:w-auto">
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Description</h3>
-            {isEditing ? (
-              <Textarea
-                name="description"
-                value={editedNote.description}
-                onChange={handleInputChange}
-                className="mt-1"
-              />
-            ) : (
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{note.description}</p>
-            )}
-          </div>
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Tags</h3>
-            {isEditing ? (
-              <Input
-                name="tags"
-                value={editedNote.tags.join(', ')}
-                onChange={handleTagChange}
-                className="mt-2"
-                placeholder="Enter tags separated by commas"
-              />
-            ) : (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {note.tags.map((tag: string, index: number) => (
-                  <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Preview</h3>
-            <div className="mt-2 border rounded-lg overflow-hidden dark:border-gray-700">
-              {"pdf" === 'pdf' ? (
-                previewError ? (
-                  <div className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-700">
-                    <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Preview not available</p>
-                    <Button variant="link" onClick={() => window.open(note.file_url, '_blank')} className="text-blue-600 dark:text-blue-400">
-                      Open PDF
-                    </Button>
-                  </div>
+    <Suspense>
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Card className="max-w-4xl mx-auto bg-white dark:bg-gray-800">
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+              <div className="w-full">
+                {isEditing ? (
+                  <Input
+                    name="title"
+                    value={editedNote.title}
+                    onChange={handleInputChange}
+                    className="text-xl sm:text-2xl font-bold"
+                  />
                 ) : (
-                  <canvas ref={canvasRef} className="max-w-full sm:max-w-sm md:max-w-md lg:max-w-lg h-auto" />
-                )
+                  <CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{note.title}</CardTitle>
+                )}
+                {isEditing ? (
+                  <Input
+                    name="subject"
+                    value={editedNote.subject}
+                    onChange={handleInputChange}
+                    className="mt-1 text-sm"
+                  />
+                ) : (
+                  <CardDescription className="mt-1 text-sm text-gray-600 dark:text-gray-400">{note.subject}</CardDescription>
+                )}
+              </div>
+              {isEditing ? (
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <Button onClick={handleSave} className="w-full sm:w-auto">
+                    <Save className="mr-2 h-4 w-4" />
+                    Save
+                  </Button>
+                  <Button variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto">
+                    <X className="mr-2 h-4 w-4" />
+                    Cancel
+                  </Button>
+                </div>
               ) : (
-                <img 
-                  src={note.file_url} 
-                  alt="Note preview" 
-                  className="max-w-full h-auto"
-                  onError={() => setPreviewError('Failed to load image preview')}
-                />
+                <Button variant="outline" onClick={handleEdit} className="w-full sm:w-auto">
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
+                </Button>
               )}
             </div>
-            {previewError && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Preview Error</AlertTitle>
-                <AlertDescription>{previewError}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          </CardHeader>
+          <CardContent className="space-y-6">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Uploaded on: {new Date(note.createdAt).toLocaleDateString()}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Downloads: {note.downloads_count} | Likes: {note.likes_count}
-              </p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Description</h3>
+              {isEditing ? (
+                <Textarea
+                  name="description"
+                  value={editedNote.description}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+              ) : (
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{note.description}</p>
+              )}
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <Button onClick={handleDownload} className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
-              <Button variant="outline" onClick={() => window.open(note.file_url, '_blank')} className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white w-full sm:w-auto">
-                <Eye className="mr-2 h-4 w-4" />
-                Full Preview
-              </Button>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Tags</h3>
+              {isEditing ? (
+                <Input
+                  name="tags"
+                  value={editedNote.tags.join(', ')}
+                  onChange={handleTagChange}
+                  className="mt-2"
+                  placeholder="Enter tags separated by commas"
+                />
+              ) : (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {note.tags.map((tag: string, index: number) => (
+                    <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </main>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Preview</h3>
+              <div className="mt-2 border rounded-lg overflow-hidden dark:border-gray-700">
+                {"pdf" === 'pdf' ? (
+                  previewError ? (
+                    <div className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-700">
+                      <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Preview not available</p>
+                      <Button variant="link" onClick={() => window.open(note.file_url, '_blank')} className="text-blue-600 dark:text-blue-400">
+                        Open PDF
+                      </Button>
+                    </div>
+                  ) : (
+                    <canvas ref={canvasRef} className="max-w-full sm:max-w-sm md:max-w-md lg:max-w-lg h-auto" />
+                  )
+                ) : (
+                  <img 
+                    src={note.file_url} 
+                    alt="Note preview" 
+                    className="max-w-full h-auto"
+                    onError={() => setPreviewError('Failed to load image preview')}
+                  />
+                )}
+              </div>
+              {previewError && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Preview Error</AlertTitle>
+                  <AlertDescription>{previewError}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Uploaded on: {new Date(note.createdAt).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Downloads: {note.downloads_count} | Likes: {note.likes_count}
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <Button onClick={handleDownload} className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+                <Button variant="outline" onClick={() => window.open(note.file_url, '_blank')} className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white w-full sm:w-auto">
+                  <Eye className="mr-2 h-4 w-4" />
+                  Full Preview
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </main>
+    </Suspense>
   )
 }
