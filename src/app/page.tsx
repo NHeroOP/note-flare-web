@@ -194,10 +194,10 @@ export default function LandingPage() {
             </div>
             <nav>
               <ul className="flex space-x-4">
-                <li><Link href="/about" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">About</Link></li>
-                <li><Link href="/privacy" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Privacy</Link></li>
-                <li><Link href="/terms" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Terms</Link></li>
-                <li><Link href="/contact" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Contact</Link></li>
+                <li><Link href="/not-found" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">About</Link></li>
+                <li><Link href="/not-found" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Privacy</Link></li>
+                <li><Link href="/not-found" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Terms</Link></li>
+                <li><Link href="/not-found" className="text-sm text-gray-600 hover:text-teal-500 dark:text-gray-400 dark:hover:text-teal-400">Contact</Link></li>
               </ul>
             </nav>
           </div>

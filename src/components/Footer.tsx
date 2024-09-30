@@ -12,16 +12,16 @@ export default function Footer() {
             <p className="text-sm text-gray-600 dark:text-gray-400">© {new Date().getFullYear()} Notes Flare. All rights reserved.</p>
           </div>
           <nav className="flex space-x-4">
-            <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+            <Link href="/not-found" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
               About
             </Link>
-            <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+            <Link href="/not-found" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+            <Link href="/not-found" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
               Terms of Service
             </Link>
-            <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+            <Link href="/not-found" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
               Contact Us
             </Link>
           </nav>
