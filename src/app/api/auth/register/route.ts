@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     const verifyToken = Math.floor(100000 + Math.random() * 900000).toString()
     const encryptedToken = encryptToken(verifyToken)
     const expiryDate = new Date();
-    expiryDate.setSeconds(expiryDate.getSeconds() + 40);
+    expiryDate.setMinutes(expiryDate.getMinutes() + 15);
     cookies().set(VERIFY_TOKEN_COOKIE, encryptedToken, {
       path: "/",
       httpOnly: true,

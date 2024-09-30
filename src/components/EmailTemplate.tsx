@@ -44,7 +44,7 @@ export default function EmailTemplate({
             <Heading className="text-[#1d1c1d] text-[36px] font-[700] my-[30px] mx-0 p-0 leading-[42px]">Confirm your email address</Heading>
             <Text className="text-[20px] leading-[28px] mb-[30px]">
               Thanks for Registering - Please use the following verification code
-              to complete your registration.
+              to complete your registration. Code is valid for 15 minutes.
             </Text>
 
             <Section className="py-[40px] px-[10px] rounded-[4px] bg-gray-100">

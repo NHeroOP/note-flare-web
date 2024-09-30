@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
 
       const expiryDate = new Date();
-      expiryDate.setSeconds(expiryDate.getSeconds() + 40);
+      expiryDate.setMinutes(expiryDate.getMinutes() + 15);
       cookies().set(VERIFY_TOKEN_COOKIE, encryptedToken, {
         path: "/",
         httpOnly: true,
