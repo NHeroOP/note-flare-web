@@ -1,11 +1,16 @@
 import { SESSION_COOKIE } from "@/const";
 import { createSessionClient } from "@/models/server/config";
 import { cookies, headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = cookies().get(SESSION_COOKIE);
+    const session = req.cookies.get(SESSION_COOKIE)
+
+    if (!session || !session.value) {
+      return NextResponse.json({success: false}, { status: 400 });
+    }
+
     const { account } = await createSessionClient(session);
     cookies().delete(SESSION_COOKIE);
 
