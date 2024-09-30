@@ -3,10 +3,10 @@ import { createAdminClient } from "@/models/server/config";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const userId = request.nextUrl.searchParams.get("userId");
-    const secret = request.nextUrl.searchParams.get("secret");
+    const userId = req.nextUrl.searchParams.get("userId");
+    const secret = req.nextUrl.searchParams.get("secret");
 
     if (!userId || !secret) {
       return new NextResponse("OAuth2 did not provide token", { status: 400 });
@@ -28,7 +28,8 @@ export async function GET(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
     });
     
-    const res = NextResponse.redirect("http://localhost:3000/home")
+
+    const res = NextResponse.redirect(new URL("/home", req.url))
     
     return res;
   
