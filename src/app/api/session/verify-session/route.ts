@@ -7,13 +7,13 @@ export async function GET() {
     const session = cookies().get(SESSION_COOKIE)  
     
     if (!session || !session.value) {
-      return NextResponse.json({ success: false }, { status: 401 })
+      return NextResponse.json(false, { status: 401 })
     }
 
-    return NextResponse.json({ success: true }, { status: 200 })
+    return NextResponse.json(true, { status: 200 })
   
   }
   catch (err) {
-    return NextResponse.json({ success: false }, { status: 500 })
+    return NextResponse.json(false, { status: 500 })
   }
 }
