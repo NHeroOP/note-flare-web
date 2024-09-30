@@ -3,11 +3,10 @@ import type { NextRequest } from 'next/server'
 
 import getOrCreateDB from '@/models/server/dbSetup'
 import getOrCreateStorage from "@/models/server/storageSetup" 
-import { getLoggedInUser } from './models/server/config'
+import { getLoggedInUser } from '@/models/server/config'
 
 let isDbInitialized = false
 let isStorageInitialized = false
-
 
 export async function middleware(req: NextRequest) {
   
@@ -20,23 +19,21 @@ export async function middleware(req: NextRequest) {
     isStorageInitialized = true;
   }
 
+  const url = req.nextUrl
   const user = await getLoggedInUser()
   
-  const isLoginPage = req.nextUrl.pathname === "/login"
-  const isRegisterPage = req.nextUrl.pathname === "/register"
+  const isLoginPage = url.pathname === "/login"
+  const isRegisterPage = url.pathname === "/register"
+  const isVerifyPage = url.pathname === "/verify"
+  const isLandingPage = url.pathname === "/"
+  
 
-  if (!user && !isLoginPage && !isRegisterPage) {  
-
-    const url = req.nextUrl.clone()
-    url.pathname = "/login"
-    return NextResponse.redirect(url)
+  if (!user && !isLoginPage && !isRegisterPage && !isVerifyPage && !isLandingPage) {
+    return NextResponse.redirect(new URL("/login", url))
   }
 
-  if (user && (isLoginPage || isRegisterPage)) {
-    
-    const url = req.nextUrl.clone()
-    url.pathname = "/home"
-    return NextResponse.redirect(url)
+  if (user && (isLoginPage || isRegisterPage || isVerifyPage)) {
+    return NextResponse.redirect(new URL("/home", url))
   }
 
   return NextResponse.next()
