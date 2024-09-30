@@ -28,9 +28,9 @@ export const useAuthStore = create<IAuthStore>()(
 
       async verifySession() {
         try {
-          const haveSession = (await axios.get("/api/session/verify-session")).data;
+          const hasSession = (await axios.get("/api/session/verify-session")).data;
           
-          if (haveSession.success) {
+          if (hasSession) {
             set({ isAuthenticated: true })
           } else {
             set({ isAuthenticated: false })
