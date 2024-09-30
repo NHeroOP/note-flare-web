@@ -32,7 +32,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <Book className="h-8 w-8 text-teal-500 dark:text-teal-400 mr-2" />
-              <span className="text-2xl font-bold text-gray-800 dark:text-white">ClassroomNotes</span>
+              <span className="text-2xl font-bold text-gray-800 dark:text-white">Notes Flare</span>
             </div>
             <nav className="hidden md:flex items-center space-x-4">
               <Button asChild variant="ghost">
@@ -76,7 +76,7 @@ export default function LandingPage() {
       <main className="flex-grow">
         <section className="py-20 text-center">
           <div className="container mx-auto px-4">
-            <h1 className="text-5xl font-bold mb-6 text-gray-900 dark:text-white">Welcome to ClassroomNotes</h1>
+            <h1 className="text-5xl font-bold mb-6 text-gray-900 dark:text-white">Welcome to Notes Flare</h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">Your ultimate platform for sharing and discovering academic notes. Elevate your learning experience today!</p>
             <div className="flex justify-center space-x-4">
               <Button asChild size="lg" className="bg-teal-500 hover:bg-teal-600 text-white dark:bg-teal-600 dark:hover:bg-teal-700">
@@ -130,7 +130,7 @@ export default function LandingPage() {
               <div className="md:w-1/2 mb-8 md:mb-0">
                 <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Coming Soon to Mobile</h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                  Get ready for ClassroomNotes on the go! Our mobile app is in development and will be available soon for both iOS and Android devices.
+                  Get ready for Notes Flare on the go! Our mobile app is in development and will be available soon for both iOS and Android devices.
                 </p>
                 <Button asChild className="bg-teal-500 hover:bg-teal-600 text-white dark:bg-teal-600 dark:hover:bg-teal-700">
                   <Link href="#notify">Get Notified</Link>
@@ -148,7 +148,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">What Our Users Say</h2>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {[
-                { name: "Alex Johnson", text: "ClassroomNotes has been a game-changer for my studies. The quality of notes available is outstanding!", color: "teal" },
+                { name: "Alex Johnson", text: "Notes Flare has been a game-changer for my studies. The quality of notes available is outstanding!", color: "teal" },
                 { name: "Samantha Lee", text: "I love how easy it is to share my notes and help other students. This platform has created a wonderful community.", color: "purple" },
                 { name: "Michael Chen", text: "The variety of subjects covered is impressive. I always find what I need for my classes.", color: "orange" }
               ].map((testimonial, index) => (
@@ -190,7 +190,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-sm text-gray-600 dark:text-gray-400">© 2023 ClassroomNotes. All rights reserved.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">© 2023 Notes Flare. All rights reserved.</p>
             </div>
             <nav>
               <ul className="flex space-x-4">
