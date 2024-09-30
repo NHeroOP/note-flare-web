@@ -1,5 +1,5 @@
 import { Layout } from "@/components";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function AuthLayout({
   children,
@@ -10,7 +10,13 @@ export default function AuthLayout({
   return (
     <>
       <Layout>
-        {children}
+        <Suspense fallback={
+          <div className="h-full flex flex-grow justify-center items-center">
+            <span className="loading loading-bars w-48"></span>
+          </div>
+        }>
+          {children}
+        </Suspense>
       </Layout>
     </>
   );
