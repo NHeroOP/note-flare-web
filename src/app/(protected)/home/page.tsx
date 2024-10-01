@@ -45,6 +45,7 @@ export default function Home() {
   const router = useRouter()
 
   const getNotes = useCallback(async () => {
+    setLoading(true)
     const { data: notesRes } = await axios.get("/api/notes/get/all")
 
     if (notesRes.success) {
@@ -67,6 +68,8 @@ export default function Home() {
       
       setFilteredAndSortedNotes(filteredAndSortedNotes)
     }
+
+    setLoading(false)
   }, [])
   useEffect(() => {
     getNotes()
@@ -125,6 +128,11 @@ export default function Home() {
       </section>
 
       <section>
+        {loading ? (
+          <div className="h-full flex flex-grow justify-center items-center">
+            <span className="loading loading-bars w-48"></span>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAndSortedNotes.map((note) => (
             <Card key={note.id} className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" onClick={() => router.replace(`/note/${note.id}`)}>
@@ -152,7 +160,7 @@ export default function Home() {
               </CardFooter>
             </Card>
           ))}
-        </div>
+        </div>)}
       </section>
 
       {filteredAndSortedNotes.length === 0 && (
