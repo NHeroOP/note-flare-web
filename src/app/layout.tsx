@@ -4,6 +4,7 @@ import "./globals.css";
 import { Layout } from "@/components";
 import ThemeProvider from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} min-h-screen antialiased`}>
+        <SpeedInsights />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
