@@ -30,9 +30,9 @@ const subjects = [
 ]
 
 export default function Component() {
-  const [title, setTitle] = useState('test title')
+  const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
-  const [description, setDescription] = useState('test description')
+  const [description, setDescription] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [tags, setTags] = useState<string[]>([])
   const [currentTag, setCurrentTag] = useState('')
