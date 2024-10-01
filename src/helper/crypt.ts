@@ -2,7 +2,6 @@ import crypto from 'crypto';
 
 // Secret key for encryption (should be stored securely in env variables)
 const secretKey = String(process.env.TOKEN_SECRET);
-console.log(secretKey)
 
 // Function to encrypt the token
 export function encryptToken(token: any) {
