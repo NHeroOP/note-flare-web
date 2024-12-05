@@ -13,6 +13,7 @@ export async function signInWithGoogle() {
   const failureUrl = `https://note-flare.nhero.tech/login`;
 
   console.log("test 1")
+  console.log("google oauth", OAuthProvider.Google)
 
   const redirectUrl = await account.createOAuth2Token(
     OAuthProvider.Google,
