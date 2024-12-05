@@ -145,7 +145,7 @@ export default function Login() {
           </Form>
           <form className="mt-4" action={signInWithGoogle}>
           
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" type="submit">
               Login with Google
             </Button>
           </form>
