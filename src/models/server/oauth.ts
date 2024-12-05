@@ -9,8 +9,8 @@ export async function signInWithGoogle() {
   const { account } = await createAdminClient();
 
   const origin = headers().get("origin");
-  const successUrl = `https://note-flare.nhero.tech/api/oauth`;
-  const failureUrl = `https://note-flare.nhero.tech/login`;
+  const successUrl = `${origin}/api/oauth`;
+  const failureUrl = `${origin}/login`;
 
   console.log("test 1")
   console.log("google oauth", OAuthProvider.Google)
