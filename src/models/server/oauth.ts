@@ -18,5 +18,5 @@ export async function signInWithGoogle() {
     failureUrl
   );
 
-  redirect(redirectUrl);
+  return redirect(redirectUrl);
 }
