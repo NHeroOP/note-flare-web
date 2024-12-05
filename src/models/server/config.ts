@@ -1,3 +1,4 @@
+"use server"
 
 import { SESSION_COOKIE } from '@/const';
 import env from '@/env';
