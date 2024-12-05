@@ -9,8 +9,10 @@ export async function signInWithGoogle() {
   const { account } = await createAdminClient();
 
   const origin = headers().get("origin");
-  const successUrl = `${origin}/api/oauth`;
-  const failureUrl = `${origin}/login`;
+  const successUrl = `https://note-flare.nhero.tech/api/oauth`;
+  const failureUrl = `https://note-flare.nhero.tech/login`;
+
+  console.log("test 1")
 
   const redirectUrl = await account.createOAuth2Token(
     OAuthProvider.Google,
@@ -18,5 +20,7 @@ export async function signInWithGoogle() {
     failureUrl
   );
 
+  console.log("test 2")
+  
   return redirect(redirectUrl);
 }
